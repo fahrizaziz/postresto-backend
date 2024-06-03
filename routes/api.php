@@ -26,3 +26,6 @@ Route::apiResource('/api-products', App\Http\Controllers\Api\ProductController::
 
 //categories api
 Route::apiResource('/api-categories', App\Http\Controllers\Api\CategoryController::class)->middleware('auth:sanctum');
+
+//logout api
+Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])->middleware('auth:sanctum');
