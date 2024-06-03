@@ -29,3 +29,6 @@ Route::apiResource('/api-categories', App\Http\Controllers\Api\CategoryControlle
 
 //logout api
 Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+//orders api
+Route::post('/save-order', [App\Http\Controllers\Api\OrderController::class, 'saveOrder'])->middleware('auth:sanctum');
