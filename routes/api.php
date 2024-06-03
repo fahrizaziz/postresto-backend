@@ -32,3 +32,8 @@ Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout'
 
 //orders api
 Route::post('/save-order', [App\Http\Controllers\Api\OrderController::class, 'saveOrder'])->middleware('auth:sanctum');
+
+//discounts api
+Route::get('/api-discounts', [App\Http\Controllers\Api\DiscountController::class, 'index'])->middleware('auth:sanctum');
+
+Route::post('/api-discounts', [App\Http\Controllers\Api\DiscountController::class, 'store'])->middleware('auth:sanctum');
