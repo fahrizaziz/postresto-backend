@@ -6,46 +6,48 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-     //login api
-     public function login(Request $request)
-     {
-         //validate the request...
-         $request->validate([
-             'email' => 'required|email',
-             'password' => 'required',
-         ]);
+    //login api
+    public function login(Request $request)
+    {
+        //validate the request...
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-         //check if the user exists
-         $user = User::where('email', $request->email)->first();
-         if (!$user) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'User not found'
-             ], 404);
-         }
+        //check if the user exists
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
 
-         //check if the password is correct
-         if (!Hash::check($request->password, $user->password)) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'Invalid credentials'
-             ], 401);
-         }
+        //check if the password is correct
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
 
-         //generate token
-         $token = $user->createToken('auth-token')->plainTextToken;
+        //generate token
+        //  $token = $user->createToken('auth-token')->plainTextToken;
+        $token = JWTAuth::fromUser($user);
 
-         return response()->json([
-             'status' => 'success',
-             'token' => $token,
-             'user' => $user
-         ], 200);
-     }
+        return response()->json([
+            'status' => 'success',
+            'token' => $token,
+            'user' => $user
+        ], 200);
+    }
 
-      //logout
+    //logout
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
